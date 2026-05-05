@@ -2,6 +2,11 @@ from typing import Dict, Optional
 from pydantic import BaseModel, Field
 
 
+class CountryResponse(BaseModel):
+    code: str
+    name: str
+
+
 class RateData(BaseModel):
     currency_code: str
     buy: float

@@ -42,7 +42,16 @@ class DivisasClient:
         """Starts a fluent query builder sequence."""
         return QueryBuilder(self)
 
-    def _request(self, endpoint: str, query_params: Optional[Dict[str, str]], response_model: Type[T]) -> T:
+    def get_countries(self) -> list['CountryResponse']:
+        from .models import CountryResponse
+        data = self._request("/countries", None, list)
+        return [CountryResponse.model_validate(item) for item in data]
+
+    def get_currencies(self, country: 'Country') -> list[str]:
+        data = self._request(f"/{country.value}/currencies", None, list)
+        return list(data)
+
+    def _request(self, endpoint: str, query_params: Optional[Dict[str, str]], response_model: Type[T] | type) -> T | list:
         """Internal synchronous request dispatcher."""
         url = endpoint if endpoint.startswith("/") else f"/{endpoint}"
         
