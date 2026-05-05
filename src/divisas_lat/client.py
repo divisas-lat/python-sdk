@@ -1,5 +1,5 @@
 import os
-from typing import Dict, Optional, Type, TypeVar
+from typing import Dict, Optional, Type, TypeVar, Union
 import httpx
 from pydantic import BaseModel
 
@@ -51,7 +51,7 @@ class DivisasClient:
         data = self._request(f"/{country.value}/currencies", None, list)
         return list(data)
 
-    def _request(self, endpoint: str, query_params: Optional[Dict[str, str]], response_model: Type[T] | type) -> T | list:
+    def _request(self, endpoint: str, query_params: Optional[Dict[str, str]], response_model: Union[Type[T], type]) -> Union[T, list]:
         """Internal synchronous request dispatcher."""
         url = endpoint if endpoint.startswith("/") else f"/{endpoint}"
         
